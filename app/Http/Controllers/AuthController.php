@@ -79,7 +79,7 @@ class AuthController extends Controller
     /**
      * Obtener el objeto User como json
      */
-    public function user(Request $request)
+    public function getUser(Request $request)
     {
         return response()->json($request->user());
     }
