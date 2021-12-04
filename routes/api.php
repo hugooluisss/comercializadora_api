@@ -33,6 +33,7 @@ Route::group([
     ], function() {
         Route::get('logout', [AuthController::class, 'logout']);
         Route::get('get', [AuthController::class, 'getUser']);
+        Route::get('getRole', [AuthController::class, 'getRole']);
     });
 });
 

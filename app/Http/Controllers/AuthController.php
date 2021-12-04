@@ -86,4 +86,12 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
+    /**
+     * Obtener el rol
+     */
+    public function getRole(Request $request)
+    {
+        return response()->json($request->user()->role);
+    }
 }
