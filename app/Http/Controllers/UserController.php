@@ -25,8 +25,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $obj = User::create($request->all());
+        $data = $request->all();
+        if (isset($data['password']))
+            $data['password'] = $this->setPassword($data['password']);
+        else
+            unset($data['password']);
+            
+        $obj = User::create($data);
         return response()->json($obj, 200);
+    }
+
+    private function setPassword(string $password){
+        if ($password)
+            return bcrypt($password);
+
+        return false;
     }
 
     /**
@@ -39,7 +52,13 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $obj = User::findOrFail($id);
-        $obj->update($request->all());
+        $data = $request->all();
+        if (isset($data['password']))
+            $data['password'] = $this->setPassword($data['password']);
+        else
+            unset($data['password']);
+
+        $obj->update($data);
 
         return response()->json($obj, 200);
     }
