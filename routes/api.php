@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -41,4 +42,5 @@ Route::group([
     'middleware' => 'auth:api'
   ], function() {
     Route::resource('users', UserController::class)->except(['create', 'edit']);
+    Route::resource('shops', ShopController::class)->except(['create', 'edit']);
 });
