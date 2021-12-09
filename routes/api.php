@@ -42,5 +42,6 @@ Route::group([
     'middleware' => 'auth:api'
   ], function() {
     Route::resource('users', UserController::class)->except(['create', 'edit']);
+    Route::post('users/{id}/setShops', [UserController::class, 'setShops']);
     Route::resource('shops', ShopController::class)->except(['create', 'edit']);
 });

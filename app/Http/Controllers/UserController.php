@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        $users = User::with('shops')->get();
+        return $users;
     }
 
     /**
@@ -75,5 +77,17 @@ class UserController extends Controller
         $obj->delete();
 
         return response(null, 204);
+    }
+
+    public function setShops(Request $request, $id){
+        $user = User::findOrFail($id);
+        
+        $shops_id = array_map(static function($shop){
+            return $shop['id'];
+        }, $request->get('shops'));
+
+        $user->shops()->sync($shops_id);
+
+        return response()->json(User::find($id)->with('shops')->first(), 200);
     }
 }
