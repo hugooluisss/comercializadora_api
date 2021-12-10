@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
@@ -41,7 +42,8 @@ Route::group([
 Route::group([
     'middleware' => 'auth:api'
   ], function() {
-    Route::resource('users', UserController::class)->except(['create', 'edit']);
+    Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::post('users/{id}/setShops', [UserController::class, 'setShops']);
-    Route::resource('shops', ShopController::class)->except(['create', 'edit']);
+    Route::resource('shops', ShopController::class)->except(['create', 'edit', 'show']);
+    Route::resource('customers', CustomersController::class)->except(['create', 'edit', 'show']);
 });
