@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\TestController;
@@ -46,4 +47,5 @@ Route::group([
     Route::post('users/{id}/setShops', [UserController::class, 'setShops']);
     Route::resource('shops', ShopController::class)->except(['create', 'edit', 'show']);
     Route::resource('customers', CustomersController::class)->except(['create', 'edit', 'show']);
+    Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
 });
