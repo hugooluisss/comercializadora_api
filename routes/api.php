@@ -4,9 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\ShopController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,4 +47,6 @@ Route::group([
     Route::resource('shops', ShopController::class)->except(['create', 'edit', 'show']);
     Route::resource('customers', CustomersController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
+
+    Route::resource('products', ProductController::class)->only(['index', 'destroy']);
 });
