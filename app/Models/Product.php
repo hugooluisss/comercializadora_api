@@ -26,6 +26,6 @@ class Product extends Model
     }
 
     public function prices(){
-        return $this->belongsToMany(Shop::class)->withPivot('price', 'type');
+        return $this->belongsToMany(Shop::class, 'prices')->withPivot('price', 'type');
     }
 }

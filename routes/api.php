@@ -49,4 +49,5 @@ Route::group([
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
 
     Route::resource('products', ProductController::class)->only(['index', 'destroy']);
+    Route::get('products/{id}/prices/{shop_id}', [ProductController::class, 'getPrices']);
 });

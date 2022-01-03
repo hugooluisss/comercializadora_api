@@ -14,6 +14,8 @@ class CategoriesSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('products')->delete();
+        
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('categories')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -25,7 +27,7 @@ class CategoriesSeeder extends Seeder
             ]);
 
             for($iProduct = 0 ; $iProduct < 5 ; $iProduct++){
-                DB::table('products')->insert([
+                $idProduct = DB::table('products')->insertGetId([
                     'name' => "Product $iProduct",
                     'category_id' => $idCategorie,
                     'sku' => strtoupper(uniqid()),
@@ -33,6 +35,15 @@ class CategoriesSeeder extends Seeder
                     'description' => "Description of product $iProduct of category $i",
                     'image' => ''
                 ]);
+
+                foreach([10, 100, 200] as $price){
+                    DB::table('prices')->insert([
+                        'product_id' => $idProduct,
+                        'shop_id' => 1,
+                        'type' => 10,
+                        'price' => $price,
+                    ]);
+                }
             }
         }
     }
