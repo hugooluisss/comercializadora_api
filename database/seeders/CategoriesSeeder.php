@@ -36,14 +36,14 @@ class CategoriesSeeder extends Seeder
                     'image' => ''
                 ]);
 
-                foreach([10, 100, 200] as $price){
-                    DB::table('prices')->insert([
-                        'product_id' => $idProduct,
-                        'shop_id' => 1,
-                        'type' => 10,
-                        'price' => $price,
-                    ]);
-                }
+                DB::table('product_shop')->insert([
+                    'product_id' => $idProduct,
+                    'shop_id' => 1,
+                    'stock' => rand(1, 100),
+                    'price1' => 100,
+                    'price2' => 95,
+                    'price3' => 80,
+                ]);
             }
         }
     }

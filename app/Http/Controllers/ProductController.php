@@ -12,11 +12,10 @@ class ProductController extends Controller
         return Product::with('category')->get();
     }
 
-    public function getPrices(int $id, int $shop_id){
-        $prices = DB::table("prices")->where('shop_id', $shop_id)->where('product_id', $id)->get();
-        
+    public function get(int $id){
+        $product = Product::with('shops')->find($id);
 
-        return $prices;
+        return $product;
     }
 
     /**
