@@ -50,4 +50,6 @@ Route::group([
 
     Route::resource('products', ProductController::class)->only(['index', 'destroy']);
     Route::get('products/{id}', [ProductController::class, 'get']);
+    Route::post('products/stock', [ProductController::class, 'setStock']);
+    Route::delete('products/stock/{id}/{shop_id}', [ProductController::class, 'deleteStock']);
 });
