@@ -45,6 +45,7 @@ Route::group([
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::post('users/{id}/setShops', [UserController::class, 'setShops']);
     Route::resource('shops', ShopController::class)->except(['create', 'edit', 'show']);
+    Route::get('shops/{id}/export_inventory', [ShopController::class, 'exportInventory']);
     Route::resource('customers', CustomersController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
 
