@@ -23,7 +23,8 @@ class CategoriesSeeder extends Seeder
         for($i = 0 ; $i < 5 ; $i++){
             $idCategorie = DB::table('categories')->insertGetId([
                 'name' => "Category $i",
-                'description' => "Description of category $i"
+                'description' => "Description of category $i",
+                'image' => ''
             ]);
 
             for($iProduct = 0 ; $iProduct < 5 ; $iProduct++){
@@ -33,16 +34,8 @@ class CategoriesSeeder extends Seeder
                     'sku' => strtoupper(uniqid()),
                     'name' => "Product $iProduct - Category $i",
                     'description' => "Description of product $iProduct of category $i",
-                    'image' => ''
-                ]);
-
-                DB::table('product_shop')->insert([
-                    'product_id' => $idProduct,
-                    'shop_id' => 1,
-                    'stock' => rand(1, 100),
-                    'price1' => 100,
-                    'price2' => 95,
-                    'price3' => 80,
+                    'image' => '',
+                    'stock' => 10
                 ]);
             }
         }

@@ -13,7 +13,8 @@ class Product extends Model
         'sku',
         'name',
         'description',
-        'image'
+        'image',
+        'stock'
     ];
 
     protected $cast = [
@@ -25,7 +26,7 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function shops(){
-        return $this->belongsToMany(Shop::class)->as('stock')->withPivot('stock', 'price1', 'price2', 'price3');
-    }
+    // public function shops(){
+    //     return $this->belongsToMany(Shop::class)->as('stock')->withPivot('stock', 'price1', 'price2', 'price3');
+    // }
 }
