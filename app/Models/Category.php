@@ -17,7 +17,8 @@ class Category extends Model
     protected $fillable = [
         'name',
         'description',
-        'image'
+        'image',
+        'category_parent_id'
     ];
 
     /**
@@ -29,4 +30,12 @@ class Category extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function category_parent(){
+        return $this->hasOne(Category::class, 'category_parent_id', 'id');
+    }
+
+    public function subcategories(){
+        return $this->hasMany(Category::class, 'category_parent_id', 'id');
+    }
 }

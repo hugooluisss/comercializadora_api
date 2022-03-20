@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $list = Category::get();
+        $list = Category::with(['subcategories'])->where(['category_parent_id' => 1])->get();
         return $list;
     }
 

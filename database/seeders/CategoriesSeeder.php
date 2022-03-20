@@ -23,7 +23,7 @@ class CategoriesSeeder extends Seeder
 
         $CategoryInit = DB::table('categories')->insertGetId([
             'name' => "Categoría padre",
-            'category_parent_id' => 1,
+            'category_parent_id' => 0,
             'created_at' => $current,
             'updated_at' => $current
         ]);
