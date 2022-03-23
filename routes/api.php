@@ -47,7 +47,7 @@ Route::group([
     Route::post('users/{id}/setShops', [UserController::class, 'setShops']);
     Route::resource('shops', ShopController::class)->except(['create', 'edit', 'show']);
     Route::resource('customers', CustomersController::class)->except(['create', 'edit', 'show']);
-    Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
+    Route::resource('categories', CategoryController::class)->except(['index', 'create', 'edit', 'show']);
 
     Route::resource('products', ProductController::class)->only(['index', 'destroy']);
     Route::get('products/export', [ProductController::class, 'export']);
@@ -56,5 +56,5 @@ Route::group([
 });
 
 Route::group([], function(){
-  Route::get("shopsPublicated", [ShopController::class, 'index']);
+  Route::get("categories", [CategoryController::class, 'index']);
 });

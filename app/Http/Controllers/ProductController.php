@@ -13,7 +13,7 @@ use stdClass;
 class ProductController extends Controller
 {
     public function index(){
-        return Product::with('category')->get();
+        return Product::withTrashed()->with('category')->get();
     }
 
     public function get(int $id){
