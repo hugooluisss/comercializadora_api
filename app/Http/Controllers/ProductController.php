@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class ProductController extends Controller
 {
@@ -37,11 +39,10 @@ class ProductController extends Controller
     public function export(){
         $categoriesParents = Category::getParents();
         $products = [];
-        $products[] = ['id', 'Categoria', 'Subcategoría', 'SKU', 'Nombre', 'Descripción', 'urlImagen', 'Stock', 'Precio1', 'Precio2', 'Precio3', 'Borrar'];
+        $products[] = ['Categoria', 'Subcategoría', 'SKU', 'Nombre', 'Descripción', 'urlImagen', 'Stock', 'Precio1', 'Precio2', 'Precio3', 'Borrar'];
         
         foreach(Product::with(['category'])->withTrashed()->get() as $product){
             $row = [
-                $product->id,
                 $categoriesParents[$product->category->category_parent_id]->name,
                 $product->category->name,
                 $product->sku,
@@ -61,7 +62,80 @@ class ProductController extends Controller
         return $products;
     }
 
-    private function findCategoryParent(Category $category){
-        
+    public function import(Request $request){
+        $rows = explode("\r\n", $request->post('csv', ''));
+        array_shift($rows);
+        $categories = [];
+        $success = 0;
+        foreach($rows as $row){
+            $productForImport = $this->createObjectCsv(data: str_getcsv($row));
+
+            $product = Product::withTrashed()->where(['sku' => $productForImport->sku])->first();
+            if (is_null($product)){
+                $product = new Product();
+            }
+
+            $product->sku = $productForImport->sku;
+            $product->name = $productForImport->name;
+            $product->description = $productForImport->description;
+            $product->image = $productForImport->image;
+            $product->stock = $productForImport->stock;
+            $product->price1 = $productForImport->price1;
+            $product->price2 = $productForImport->price2;
+            $product->price3 = $productForImport->price3;
+
+            $subcategory = $this->searchCategories(
+                nameSubcategory: $productForImport->subcategory, 
+                nameCategory: $productForImport->category, 
+                bufferCategories: $categories);
+
+            $product->category_id = $subcategory->id;
+
+            $success += $product->save()?1:0;
+
+            if ($productForImport->forDelete){
+                $product->delete();
+            }else{
+                $product->restore();
+            }
+        }
+
+        return response(json_encode([
+            'success' => $success
+        ]), 200);
+    }
+
+    private function createObjectCsv(array $data): stdClass{
+        $productForImport = new stdClass;
+        $productForImport->sku = $data[2];
+        $productForImport->name = $data[3];
+        $productForImport->description = $data[4];
+        $productForImport->image = $data[5];
+        $productForImport->stock = (int) $data[6];
+        $productForImport->price1 = (float) $data[7];
+        $productForImport->price2 = (float) $data[8];
+        $productForImport->price3 = (float) $data[9];
+        $productForImport->category = $data[0];
+        $productForImport->subcategory = $data[1];
+        $productForImport->forDelete = (bool) $data[10] == '1';
+
+        return $productForImport;
+    }
+
+    private function searchCategories(string $nameSubcategory, string $nameCategory, array &$bufferCategories): Category{
+        $key = "{$nameSubcategory}_{$nameCategory}";
+
+        if (isset($bufferCategories[$key])) return $bufferCategories[$key];
+
+        $subcategories = Category::with(['category_parent'])->where(['name' => $nameSubcategory])->get();
+        foreach($subcategories as $subcategory){
+            if ($subcategory->category_parent->name == $nameCategory){
+                $bufferCategories[$key] = $subcategory;
+
+                return $subcategory;
+            }
+        }
+
+        throw new Exception("{$nameSubcategory}_{$nameCategory} Category not found");
     }
 }

@@ -32,11 +32,11 @@ class Category extends Model
     ];
 
     public function category_parent(){
-        return $this->hasOne(Category::class, 'category_parent_id', 'id');
+        return $this->hasOne(Category::class, 'id', 'category_parent_id');
     }
 
     public function subcategories(){
-        return $this->hasMany(Category::class, 'category_parent_id', 'id');
+        return $this->hasMany(Category::class, 'id', 'category_parent_id');
     }
 
     public static function getParents(): array{

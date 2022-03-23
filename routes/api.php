@@ -51,7 +51,8 @@ Route::group([
 
     Route::resource('products', ProductController::class)->only(['index', 'destroy']);
     Route::get('products/export', [ProductController::class, 'export']);
-    Route::get('products/{id}', [ProductController::class, 'get']);
+    Route::post('products/import', [ProductController::class, 'import']);
+    // Route::get('products/{id}', [ProductController::class, 'get']);
 });
 
 Route::group([], function(){
