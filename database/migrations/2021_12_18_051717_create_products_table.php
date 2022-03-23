@@ -21,6 +21,12 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->text('image')->nullable();
             $table->unsignedInteger('stock')->default(0);
+            $table->decimal('price1', 12, 1, true)->default(0);
+            $table->decimal('price2', 12, 1, true)->default(0);
+            $table->decimal('price3', 12, 1, true)->default(0);
+            $table->integer('limit1')->default(0);
+            $table->integer('limit2')->default(10);
+            $table->integer('limit3')->default(15);
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');

@@ -38,4 +38,16 @@ class Category extends Model
     public function subcategories(){
         return $this->hasMany(Category::class, 'category_parent_id', 'id');
     }
+
+    public static function getParents(): array{
+        $records = self::where(['category_parent_id' => 1])->get();
+
+        $categories = [];
+
+        foreach($records as $category){
+            $categories[$category->id] = $category;
+        }
+
+        return $categories;
+    }
 }

@@ -46,14 +46,12 @@ Route::group([
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::post('users/{id}/setShops', [UserController::class, 'setShops']);
     Route::resource('shops', ShopController::class)->except(['create', 'edit', 'show']);
-    Route::get('shops/{id}/export_inventory', [ShopController::class, 'exportInventory']);
     Route::resource('customers', CustomersController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['create', 'edit', 'show']);
 
     Route::resource('products', ProductController::class)->only(['index', 'destroy']);
+    Route::get('products/export', [ProductController::class, 'export']);
     Route::get('products/{id}', [ProductController::class, 'get']);
-    Route::post('products/stock', [ProductController::class, 'setStock']);
-    Route::delete('products/stock/{id}/{shop_id}', [ProductController::class, 'deleteStock']);
 });
 
 Route::group([], function(){
