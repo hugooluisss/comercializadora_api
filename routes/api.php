@@ -57,4 +57,5 @@ Route::group([
 
 Route::group([], function(){
   Route::get("categories", [CategoryController::class, 'index']);
+  Route::get("products", [ProductController::class, 'haveStock']);
 });
