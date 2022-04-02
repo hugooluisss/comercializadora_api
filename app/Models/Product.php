@@ -15,7 +15,8 @@ class Product extends Model
         'name',
         'description',
         'image',
-        'stock'
+        'stock',
+        'brand'
     ];
 
     protected $cast = [

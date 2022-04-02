@@ -34,7 +34,7 @@ class ProductController extends Controller
     }
 
     public function get(int $id){
-        $product = Product::with('shops')->find($id);
+        $product = Product::with('category')->find($id);
 
         return $product;
     }
