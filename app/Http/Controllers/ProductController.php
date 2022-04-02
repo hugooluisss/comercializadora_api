@@ -140,7 +140,7 @@ class ProductController extends Controller
         $productForImport->price3 = (float) $data[9];
         $productForImport->limit1 = (float) $data[10];
         $productForImport->limit2 = (float) $data[11];
-        $productForImport->brand = (float) $data[12];
+        $productForImport->brand = (string) $data[12];
         $productForImport->category = $data[0];
         $productForImport->subcategory = $data[1];
         $productForImport->forDelete = (bool) $data[13] == '1';
