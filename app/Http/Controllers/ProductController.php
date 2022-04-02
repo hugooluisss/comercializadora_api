@@ -56,7 +56,7 @@ class ProductController extends Controller
     public function export(){
         $categoriesParents = Category::getParents();
         $products = [];
-        $products[] = ['Categoria', 'Subcategoría', 'SKU', 'Nombre', 'Descripción', 'urlImagen', 'Stock', 'Precio1', 'Precio2', 'Precio3', 'Borrar'];
+        $products[] = ['Categoria', 'Subcategoría', 'SKU', 'Nombre', 'Descripción', 'urlImagen', 'Stock', 'Precio1', 'Precio2', 'Precio3', 'Límite 1', 'Límite 2', 'Marca', 'Borrar'];
         
         foreach(Product::with(['category'])->withTrashed()->get() as $product){
             $row = [
@@ -70,6 +70,9 @@ class ProductController extends Controller
                 $product->price1,
                 $product->price2,
                 $product->price3,
+                $product->limit1,
+                $product->limit2,
+                $product->brand,
                 is_null($product->delete_at)?0:1
             ];
 
@@ -100,6 +103,9 @@ class ProductController extends Controller
             $product->price1 = $productForImport->price1;
             $product->price2 = $productForImport->price2;
             $product->price3 = $productForImport->price3;
+            $product->limit1 = $productForImport->limit1;
+            $product->limit2 = $productForImport->limit2;
+            $product->brand = $productForImport->brand;
 
             $subcategory = $this->searchCategories(
                 nameSubcategory: $productForImport->subcategory, 
@@ -132,9 +138,12 @@ class ProductController extends Controller
         $productForImport->price1 = (float) $data[7];
         $productForImport->price2 = (float) $data[8];
         $productForImport->price3 = (float) $data[9];
+        $productForImport->limit1 = (float) $data[10];
+        $productForImport->limit2 = (float) $data[11];
+        $productForImport->brand = (float) $data[12];
         $productForImport->category = $data[0];
         $productForImport->subcategory = $data[1];
-        $productForImport->forDelete = (bool) $data[10] == '1';
+        $productForImport->forDelete = (bool) $data[13] == '1';
 
         return $productForImport;
     }
