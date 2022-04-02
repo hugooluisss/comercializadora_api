@@ -18,6 +18,10 @@ class CategoryController extends Controller
         return $list;
     }
 
+    public function get(int $id){
+        return Category::with('subcategories')->findOrFail($id);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

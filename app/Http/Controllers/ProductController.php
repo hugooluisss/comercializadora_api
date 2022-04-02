@@ -16,8 +16,21 @@ class ProductController extends Controller
         return Product::withTrashed()->with('category')->get();
     }
 
+    private function getWithStock(){
+        return Product::with('category')->where('stock', '>', 0);
+    }
+
     public function haveStock(){
-        return Product::with('category')->where('stock', '>', 0)->get();
+        $products = $this->getWithStock()->get();
+        return $products;
+    }
+
+    public function searchByCategory(int $category_id){
+        $query = $this->getWithStock();
+        
+        $query->where(['category_id' => $category_id]);
+        
+        return $query->get();
     }
 
     public function get(int $id){
