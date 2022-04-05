@@ -30,10 +30,11 @@ class CustomersController extends Controller
         try{
             DB::beginTransaction();
 
-            $data = $request->get('user');
-            $data['password'] = bcrypt($data['password']);
+            // $data = $request->get('user');
+            $data['password'] = bcrypt($request->get('password', 'asdf'));
             $data['role'] = 'CLIENTE';
             $data['name'] = $request->get('firstname')." ".$request->get("lastname");
+            $data['email'] = $request->get('email');
             $user = User::create($data);
 
             $data = $request->all();
@@ -50,7 +51,11 @@ class CustomersController extends Controller
         }
 
         DB::commit();
-        return response()->json(Customer::find($customer->id)->with('user')->first(), 200);
+        return response()->json(Customer::find($customer->id)->first(), 200);
+    }
+
+    public function signup(Request $request){
+        return $this->store($request);
     }
 
     /**
