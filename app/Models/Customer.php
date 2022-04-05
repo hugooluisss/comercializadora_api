@@ -19,15 +19,16 @@ class Customer extends Model
         'firstname',
         'lastname',
         'gender',
-        'birtday',
+        'birthday',
         'phone_movil',
         'phone_ofi',
         'address',
         'address_2',
-        'between_street',
+        'between_streets',
         'suburb',
         'municipality',
         'state',
+        'zip_code',
         'confirmed'
     ];
 
@@ -48,12 +49,8 @@ class Customer extends Model
      * @var array
      */
     protected $casts = [
-        'birtday' => 'date'
+        'birthday' => 'date'
     ];
-
-    public function shops(){
-        return $this->belongsToMany(Shop::class);
-    }
 
     public function user(){
         return $this->belongsTo(User::class);
