@@ -28,6 +28,9 @@ class CustomersController extends Controller
     public function store(Request $request)
     {
         try{
+
+            if (!$this->isOfTheUser($request->get('email', null))) throw new \Exception("El email proporcionado ya existe en otra cuenta");
+
             DB::beginTransaction();
 
             // $data = $request->get('user');
@@ -52,6 +55,13 @@ class CustomersController extends Controller
 
         DB::commit();
         return response()->json(Customer::find($customer->id)->first(), 200);
+    }
+
+    private function isOfTheUser(string $email){
+        $user = User::where('email', $email);
+        if ($user->exists()) return false;
+
+        return true;
     }
 
     public function signup(Request $request){
