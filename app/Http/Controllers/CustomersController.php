@@ -81,7 +81,7 @@ class CustomersController extends Controller
         $user = User::findOrFail($customer->user_id);
         $data = $request->all();
 
-        if ($data['user']['password'] == '')
+        if ($data['user']['password']??'' == '')
             $data['user']['password'] = $user->password;
 
         $user->update($data['user']);
