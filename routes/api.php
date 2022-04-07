@@ -63,4 +63,5 @@ Route::group([], function(){
   Route::get("product/{id}", [ProductController::class, 'get']);
 
   Route::post('customers/signup', [CustomersController::class, 'signup']);
+  Route::get('customers/user/{id}', [CustomersController::class, 'getFromUser']);
 });

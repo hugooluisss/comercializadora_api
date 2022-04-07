@@ -68,6 +68,10 @@ class CustomersController extends Controller
         return $this->store($request);
     }
 
+    public function getFromUser(int $id){
+        return Customer::with('user')->where('user_id', $id)->first();
+    }
+
     /**
      * Update the specified resource in storage.
      *

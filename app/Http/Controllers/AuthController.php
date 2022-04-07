@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -50,6 +51,17 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Unauthorized'
             ], 401);
+
+        $user = User::where('email', $request->post('email', ''))->first();
+        if($user->role == 'CLIENTE'){
+            $customer = Customer::where('user_id', $user->id)->first();
+
+            if (((bool)$customer->confirmed) == false){
+                return response()->json([
+                    'message' => 'Unauthorized'
+                ], 401);
+            }
+        }
 
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
