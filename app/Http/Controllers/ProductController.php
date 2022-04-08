@@ -167,47 +167,4 @@ class ProductController extends Controller
 
         throw new Exception("{$nameSubcategory}_{$nameCategory} Category not found");
     }
-
-    private function getCustomer(): Customer{
-        $user = User::findOrFail(Auth::id());
-
-        if (!$user->isCustomer()){
-            throw new Exception("No eres un cliente");
-        }
-
-        $customer = Customer::where('user_id', $user->id)->first();
-
-        return $customer;
-    }
-
-    public function addFavorites(Request $request){
-        try{
-            $customer = $this->getCustomer();
-
-            $product = Product::findOrFail($request->post('product_id'));
-            $product->customers()->attach($customer);
-
-            return response(json_encode([]), 200);
-
-        }catch(Exception $e){
-            return response(json_encode([
-                'error' => $e->getMessage()
-            ]), 500);
-        }
-    }
-
-    public function removeFavorites(int $product_id){
-        try{
-            $customer = $this->getCustomer();
-
-            $product = Product::findOrFail($product_id);
-            $product->customers()->detach($customer);
-
-            return response(json_encode([]), 200);
-        }catch(Exception $e){
-            return response(json_encode([
-                'error' => $e->getMessage()
-            ]), 500);
-        }
-    }
 }

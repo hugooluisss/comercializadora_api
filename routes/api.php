@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
@@ -52,8 +53,10 @@ Route::group([
     Route::resource('products', ProductController::class)->only(['index', 'destroy']);
     Route::get('products/export', [ProductController::class, 'export']);
     Route::post('products/import', [ProductController::class, 'import']);
-    Route::post('products/favorites', [ProductController::class, 'addFavorites']);
-    Route::delete('products/favorites/{product_id}', [ProductController::class, 'removeFavorites']);
+    
+    Route::get('favorites', [FavoritesController::class, 'index']);
+    Route::post('favorites', [FavoritesController::class, 'addFavorites']);
+    Route::delete('favorites/{product_id}', [FavoritesController::class, 'removeFavorites']);
     // Route::get('products/{id}', [ProductController::class, 'get']);
 });
 
