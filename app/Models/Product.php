@@ -29,6 +29,6 @@ class Product extends Model
     }
 
     public function customers(){
-        return $this->belongsToMany(Customer::class, 'favorites');
+        return $this->belongsToMany(Customer::class, 'favorites')->withTimestamps();
     }
 }

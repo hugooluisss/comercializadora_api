@@ -52,6 +52,8 @@ Route::group([
     Route::resource('products', ProductController::class)->only(['index', 'destroy']);
     Route::get('products/export', [ProductController::class, 'export']);
     Route::post('products/import', [ProductController::class, 'import']);
+    Route::post('products/favorites', [ProductController::class, 'addFavorites']);
+    Route::delete('products/favorites/{product_id}', [ProductController::class, 'removeFavorites']);
     // Route::get('products/{id}', [ProductController::class, 'get']);
 });
 
