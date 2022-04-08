@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Product;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,11 +14,11 @@ use stdClass;
 class ProductController extends Controller
 {
     public function index(){
-        return Product::withTrashed()->with('category')->get();
+        return Product::withTrashed()->with(['category', 'customers'])->get();
     }
 
     private function getWithStock(){
-        return Product::with('category')->where('stock', '>', 0);
+        return Product::with(['category', 'customers'])->where('stock', '>', 0);
     }
 
     public function haveStock(){
@@ -34,7 +35,7 @@ class ProductController extends Controller
     }
 
     public function get(int $id){
-        $product = Product::with('category')->find($id);
+        $product = Product::with(['category', 'customers'])->find($id);
 
         return $product;
     }

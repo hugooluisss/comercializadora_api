@@ -28,7 +28,7 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    // public function shops(){
-    //     return $this->belongsToMany(Shop::class)->as('stock')->withPivot('stock', 'price1', 'price2', 'price3');
-    // }
+    public function customers(){
+        return $this->belongsToMany(Customer::class, 'favorites');
+    }
 }

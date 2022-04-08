@@ -54,7 +54,7 @@ class CustomersController extends Controller
         }
 
         DB::commit();
-        return response()->json(Customer::find($customer->id)->first(), 200);
+        return response()->json(Customer::with('favorites')->find($customer->id)->first(), 200);
     }
 
     private function isOfTheUser(string $email){
@@ -69,7 +69,7 @@ class CustomersController extends Controller
     }
 
     public function getFromUser(int $id){
-        return Customer::with('user')->where('user_id', $id)->first();
+        return Customer::with(['user', 'favorites'])->where('user_id', $id)->first();
     }
 
     /**
