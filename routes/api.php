@@ -4,10 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
-use App\Models\Shop;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -57,6 +57,8 @@ Route::group([
     Route::get('favorites', [FavoritesController::class, 'index']);
     Route::post('favorites', [FavoritesController::class, 'addFavorites']);
     Route::delete('favorites/{product_id}', [FavoritesController::class, 'removeFavorites']);
+
+    Route::post('orders', [OrderController::class, 'store']);
     // Route::get('products/{id}', [ProductController::class, 'get']);
 });
 
