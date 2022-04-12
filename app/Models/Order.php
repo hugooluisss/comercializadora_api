@@ -10,10 +10,13 @@ class Order extends Model
     use HasFactory;
 
     public function customer(){
-        return $this->hasOne(Customer::class, 'customers');
+        return $this->belongsTo(Customer::class);
     }
 
     public function items(){
-        return $this->belongsToMany(Product::class, 'order_detail')->withTimestamps();
+        return $this->belongsToMany(Product::class, 'order_detail')->withTimestamps()->withPivot([
+            'amount',
+            'price'
+        ]);
     }
 }

@@ -6,9 +6,15 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Templates\TItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller{
+    public function index(){
+        $customer = Customer::where('user_id', Auth::id())->first();
+        return Order::with(['items', 'customer'])->where('customer_id', $customer->id)->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *

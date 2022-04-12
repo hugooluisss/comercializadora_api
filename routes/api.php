@@ -58,6 +58,7 @@ Route::group([
     Route::post('favorites', [FavoritesController::class, 'addFavorites']);
     Route::delete('favorites/{product_id}', [FavoritesController::class, 'removeFavorites']);
 
+    Route::get('orders', [OrderController::class, 'index']);
     Route::post('orders', [OrderController::class, 'store']);
     // Route::get('products/{id}', [ProductController::class, 'get']);
 });
