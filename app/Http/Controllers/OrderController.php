@@ -65,4 +65,8 @@ class OrderController extends Controller{
 
         return $data;
     }
+
+    public function get(int $id){
+        return Order::with('customer', 'items', 'status')->findOrFail($id);
+    }
 }
