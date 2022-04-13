@@ -17,7 +17,7 @@ class CreateTableOrder extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id')->unsigned();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedInteger('status')->default(1);
+            $table->unsignedBigInteger('status_id')->default(1);
 
             $table->timestamps();
         });

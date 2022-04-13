@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller{
     public function index(){
         $customer = Customer::where('user_id', Auth::id())->first();
-        return Order::with(['items', 'customer'])->where('customer_id', $customer->id)->get();
+        return Order::with(['items', 'customer', 'status'])
+            ->where('customer_id', $customer->id)
+            ->orderBy('updated_at', 'desc')
+            ->get();
     }
 
     /**
