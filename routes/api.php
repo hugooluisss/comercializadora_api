@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderStatusController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
@@ -61,7 +62,10 @@ Route::group([
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('orders/{id}', [OrderController::class, 'get']);
     Route::post('orders', [OrderController::class, 'store']);
+    Route::post('orders/set_status/{id}', [OrderController::class, 'setStatus']);
     // Route::get('products/{id}', [ProductController::class, 'get']);
+
+    Route::get('order_status', [OrderStatusController::class, 'index']);
 });
 
 Route::group([], function(){

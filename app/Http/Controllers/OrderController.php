@@ -12,10 +12,16 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller{
     public function index(){
         $customer = Customer::where('user_id', Auth::id())->first();
-        return Order::with(['items', 'customer', 'status'])
-            ->where('customer_id', $customer->id)
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        if (is_null($customer)){
+            return Order::with(['items', 'customer', 'status'])
+                ->orderBy('updated_at', 'desc')
+                ->get();
+        }else{
+            return Order::with(['items', 'customer', 'status'])
+                ->where('customer_id', $customer->id)
+                ->orderBy('updated_at', 'desc')
+                ->get();
+        }
     }
 
     /**
@@ -68,5 +74,14 @@ class OrderController extends Controller{
 
     public function get(int $id){
         return Order::with('customer', 'items', 'status')->findOrFail($id);
+    }
+
+    public function setStatus(Request $request, int $id){
+        $order = Order::findOrFail($id);
+
+        $order->status_id = $request->get('status');
+        $order->save();
+
+        return $this->get($id);
     }
 }
