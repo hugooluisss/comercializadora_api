@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,29 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+});
+
+Route::get('/artisan/cache', function(){
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+						
+    return redirect('/');
+});
+
+Route::get('/artisan/migrate', function(){
+    //Artisan::call('migrate', ['--force' => true]);
+    Artisan::call('migrate', [
+        '--path' => 'vendor/laravel/passport/database/migrations',
+        '--force' => true,
+    ]);
+    //Artisan::call("passport:client --client");
+    exec("php ../artisan passport:install");
+    return redirect('/');
+});
+
+Route::get('/artisan/migrate/new', function(){
+    Artisan::call('migrate --env=production');
 });
