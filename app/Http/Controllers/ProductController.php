@@ -165,6 +165,6 @@ class ProductController extends Controller
             }
         }
 
-        throw new Exception("{$nameSubcategory}_{$nameCategory} Category not found");
+        throw new Exception("{$nameSubcategory} - {$nameCategory} Category not found");
     }
 }
