@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Templates\TItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller{
     public function index(){
@@ -42,6 +44,8 @@ class OrderController extends Controller{
 
             $items = $this->createListItems($data['items']);
             $order->items()->sync($items);
+
+            $this->sendMailNotification(order: $order);
 
             DB::commit();
         }catch(\Exception $e){
@@ -82,6 +86,32 @@ class OrderController extends Controller{
         $order->status_id = $request->get('status');
         $order->save();
 
+        $this->sendMailNotification(order: $order);
+
         return $this->get($id);
+    }
+
+    private function getTemplateAndSubjectForEmail(int $status_id): array{
+        return match($status_id){
+            1 => ['emails.orderCreated', "Pedido registrado"],
+            2 => ['emails.orderInProcess', "Atendiendo tu pedido"],
+            3 => ['emails.orderInRoute', "Estamos en ruta de entrega"],
+            4 => ['emails.orderDelivered', "Pedido entregado"],
+            5 => ['emails.orderWithProblems', "Tuvimos un problema con tu pedido"],
+            6 => ['emails.orderCancel', "Pedido Cancelado"]
+        };
+    }
+
+    private function sendMailNotification(Order $order): void{
+        $user = User::findOrFail($order->customer->user_id);
+        $to = $user->email;
+
+        list($template, $subject) = $this->getTemplateAndSubjectForEmail($order->status_id);
+
+        Mail::send($template, ["order" => $order], function($message) use ($to, $subject) {
+            $message
+                ->to($to)
+                ->subject($subject);
+        });
     }
 }
