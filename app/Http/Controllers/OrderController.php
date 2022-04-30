@@ -46,6 +46,13 @@ class OrderController extends Controller{
             $order->items()->sync($items);
 
             $this->sendMailNotification(order: $order);
+            $to = explode(",", env('MAIL_ADMINS', ''));
+
+            Mail::send('emails.orderNotifyAdmin', ["order" => $order], function($message) use ($to) {
+                $message
+                    ->to($to)
+                    ->subject('Nuevo pedido');
+            });
 
             DB::commit();
         }catch(\Exception $e){
@@ -106,7 +113,7 @@ class OrderController extends Controller{
         $user = User::findOrFail($order->customer->user_id);
         $to = $user->email;
 
-        list($template, $subject) = $this->getTemplateAndSubjectForEmail($order->status_id);
+        list($template, $subject) = $this->getTemplateAndSubjectForEmail($order->status_id??1);
 
         Mail::send($template, ["order" => $order], function($message) use ($to, $subject) {
             $message
