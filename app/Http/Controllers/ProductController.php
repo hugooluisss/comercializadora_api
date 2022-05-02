@@ -19,6 +19,17 @@ class ProductController extends Controller
         return Product::withTrashed()->with(['category', 'customers'])->get();
     }
 
+    public function search(Request $request){
+        $queryParam = $request->query('query');
+        $query = Product::withTrashed()->with(['category', 'customers']);
+
+        $query->orWhere('name', 'like', "%$queryParam%");
+        $query->orWhere('sku', 'like', "%$queryParam%");
+        $query->orWhere('description', 'like', "%$queryParam%");
+        
+        return $query->get();
+    }
+
     private function getWithStock(){
         return Product::with(['category', 'customers'])->where('stock', '>', 0);
     }
