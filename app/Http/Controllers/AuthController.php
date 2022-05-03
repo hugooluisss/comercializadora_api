@@ -58,7 +58,7 @@ class AuthController extends Controller
 
             if (((bool)$customer->confirmed) == false){
                 return response()->json([
-                    'message' => 'Unauthorized'
+                    'message' => 'Customer not approved'
                 ], 401);
             }
         }
