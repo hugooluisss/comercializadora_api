@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CustomersController extends Controller
 {
@@ -45,6 +46,13 @@ class CustomersController extends Controller
             $data['user_id'] = $user->id;
             $data['confirmed'] = $data['confirmed']??0;
             $customer = Customer::create($data);
+            $to = explode(",", env('MAIL_ADMINS', ''));
+
+            Mail::send('emails.customerCreated', ["customer" => $customer], function($message) use ($to) {
+                $message
+                    ->to($to)
+                    ->subject('Cliente registrado');
+            });
         }catch(\Exception $e){
             DB::rollBack();
             return response()->json([
