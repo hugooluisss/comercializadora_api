@@ -51,7 +51,7 @@ class OrderController extends Controller{
             Mail::send('emails.orderNotifyAdmin', ["order" => $order], function($message) use ($to) {
                 $message
                     ->to($to)
-                    ->subject('Nuevo pedido');
+                    ->subject('Nueva cotizacón');
             });
 
             DB::commit();
@@ -100,7 +100,7 @@ class OrderController extends Controller{
 
     private function getTemplateAndSubjectForEmail(int $status_id): array{
         return match($status_id){
-            1 => ['emails.orderCreated', "Pedido registrado"],
+            1 => ['emails.orderCreated', "Cotización registrada"],
             2 => ['emails.orderInProcess', "Atendiendo tu pedido"],
             3 => ['emails.orderInRoute', "Estamos en ruta de entrega"],
             4 => ['emails.orderDelivered', "Pedido entregado"],
