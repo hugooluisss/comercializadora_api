@@ -40,6 +40,9 @@ class OrderController extends Controller{
             DB::beginTransaction();
             $order = new Order();
             $order->customer_id = $customer->id;
+            $order->shipping_detail = json_encode($data['shipping']);
+            $order->shipping_price = $data['shipping']['price'];
+            $order->shipping_name = $data['shipping']['description'];
             $order->save();
 
             $items = $this->createListItems($data['items']);
