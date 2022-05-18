@@ -43,6 +43,10 @@ class OrderController extends Controller{
             $order->shipping_detail = json_encode($data['shipping']);
             $order->shipping_price = $data['shipping']['price'];
             $order->shipping_name = $data['shipping']['description'];
+
+            $order->payment_detail = json_encode($data['payment']);
+            $order->payment_name = $data['payment']['description'];
+
             $order->save();
 
             $items = $this->createListItems($data['items']);
