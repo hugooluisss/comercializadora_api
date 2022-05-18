@@ -57,8 +57,20 @@
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="4" style="text-align: right">Total</td>
+            <th colspan="4" style="text-align: right">Subtotal</td>
             <td style="text-align: right">@money($subtotal)</td>
+        </tr>
+        <tr>
+            <th colspan="4" style="text-align: right">Envío</td>
+            <td style="text-align: right">@money($order->shipping_price) <small>({{$order->shipping_name}})</small></td>
+        </tr>
+        <tr>
+            <th colspan="4" style="text-align: right">Total</td>
+            <td style="text-align: right">@money($subtotal + $order->shipping_price)</td>
+        </tr>
+        <tr>
+            <th colspan="4" style="text-align: right">Forma de pago</td>
+            <td style="text-align: right"><small>({{$order->payment_name}})</small></td>
         </tr>
     </tfoot>
 </table>
