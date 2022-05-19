@@ -29,7 +29,8 @@ class Customer extends Model
         'municipality',
         'state',
         'zip_code',
-        'confirmed'
+        'confirmed',
+        'shopped'
     ];
 
     /**
