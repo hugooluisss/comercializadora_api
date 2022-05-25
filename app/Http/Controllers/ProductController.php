@@ -70,7 +70,7 @@ class ProductController extends Controller
     public function export(){
         $categoriesParents = Category::getParents();
         $products = [];
-        $products[] = ['Categoria', 'Subcategoría', 'SKU', 'Nombre', 'Descripción', 'urlImagen', 'Stock', 'Precio1', 'Precio2', 'Precio3', 'Límite 1', 'Límite 2', 'Marca', 'Borrar'];
+        $products[] = ['Categoria', 'Subcategoría', 'SKU', 'Nombre', 'Descripción', 'urlImagen', 'Stock', 'Precio1', 'Con descuento', 'Precio2', 'Con descuento', 'Precio3', 'Con descuento', 'Límite 1', 'Límite 2', 'Marca', 'Borrar'];
         
         foreach(Product::with(['category'])->withTrashed()->get() as $product){
             $row = [
@@ -82,8 +82,11 @@ class ProductController extends Controller
                 $product->image,
                 $product->stock,
                 $product->price1,
+                (is_null($product->with_discount1) or $product->price1 < $product->with_discount1)?$product->price1:$product->with_discount1,
                 $product->price2,
+                (is_null($product->with_discount2) or $product->price2 < $product->with_discount2)?$product->price2:$product->with_discount2,
                 $product->price3,
+                (is_null($product->with_discount3) or $product->price3 < $product->with_discount3)?$product->price3:$product->with_discount3,
                 $product->limit1,
                 $product->limit2,
                 $product->brand,
@@ -117,6 +120,9 @@ class ProductController extends Controller
             $product->price1 = $productForImport->price1;
             $product->price2 = $productForImport->price2;
             $product->price3 = $productForImport->price3;
+            $product->with_discount1 = $this->validateDiscount($productForImport->price1, $productForImport->with_discount1);
+            $product->with_discount2 = $this->validateDiscount($productForImport->price2, $productForImport->with_discount2);
+            $product->with_discount3 = $this->validateDiscount($productForImport->price3, $productForImport->with_discount3);
             $product->limit1 = $productForImport->limit1;
             $product->limit2 = $productForImport->limit2;
             $product->brand = $productForImport->brand;
@@ -142,6 +148,16 @@ class ProductController extends Controller
         ]), 200);
     }
 
+    private function validateDiscount(float $price, float $withDiscount = null): null | float{
+
+        return match(true){
+            is_null($withDiscount) => null,
+            $withDiscount == $price => null,
+            $withDiscount > $price => null,
+            default => $withDiscount
+        };
+    }
+
     private function createObjectCsv(array $data): stdClass{
         $productForImport = new stdClass;
         $productForImport->sku = $data[2];
@@ -150,14 +166,17 @@ class ProductController extends Controller
         $productForImport->image = $data[5];
         $productForImport->stock = (int) $data[6];
         $productForImport->price1 = (float) $data[7];
-        $productForImport->price2 = (float) $data[8];
-        $productForImport->price3 = (float) $data[9];
-        $productForImport->limit1 = (float) $data[10];
-        $productForImport->limit2 = (float) $data[11];
-        $productForImport->brand = (string) $data[12];
+        $productForImport->with_discount1 = (float) $data[8];
+        $productForImport->price2 = (float) $data[9];
+        $productForImport->with_discount2 = (float) $data[10];
+        $productForImport->price3 = (float) $data[11];
+        $productForImport->with_discount3 = (float) $data[12];
+        $productForImport->limit1 = (float) $data[13];
+        $productForImport->limit2 = (float) $data[14];
+        $productForImport->brand = (string) $data[15];
         $productForImport->category = $data[0];
         $productForImport->subcategory = $data[1];
-        $productForImport->forDelete = (bool) $data[13] == '1';
+        $productForImport->forDelete = (bool) $data[16] == '1';
 
         return $productForImport;
     }
