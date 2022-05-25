@@ -18,9 +18,27 @@ class TItem{
     }
 
     public function getPrice(): float{
-        if ($this->amount <= $this->product->limite1) return $this->product->price1;
-        if ($this->amount <= $this->product->limite2) return $this->product->price2;
+        if ($this->amount <= $this->product->limit1) return $this->product->price1;
+        if ($this->amount <= $this->product->limit2) return $this->product->price2;
 
         return $this->product->price3;
+    }
+
+    public function getDiscount(): float{
+        if ($this->amount <= $this->product->limit1) return $this->product->with_discount1;
+        if ($this->amount <= $this->product->limit2) return $this->product->with_discount2;
+
+        return $this->product->with_discount3;
+    }
+
+    public function getPriceSell(){
+        $price = $this->getPrice();
+        $discount = $this->getDiscount();
+
+        return match(true){
+            is_null($discount) => $price,
+            $discount >= $price => $price,
+            $discount < $price => $discount
+        };
     }
 }

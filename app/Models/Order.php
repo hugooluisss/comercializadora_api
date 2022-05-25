@@ -20,7 +20,8 @@ class Order extends Model
     public function items(){
         return $this->belongsToMany(Product::class, 'order_detail')->withTimestamps()->withPivot([
             'amount',
-            'price'
+            'price',
+            'price_list'
         ]);
     }
 }

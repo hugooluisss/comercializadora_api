@@ -83,7 +83,8 @@ class OrderController extends Controller{
 
             $data[$object->product->id] = [
                 'amount' => $object->amount,
-                'price' => $object->getPrice()
+                'price' => $object->getPriceSell(),
+                'price_list' => $object->getPrice()
             ];
         }
 
