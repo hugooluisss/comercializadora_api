@@ -46,7 +46,12 @@
                 <td>{{$item->sku}}</td>
                 <td>{{$item->name}}</td>
                 <td style="text-align: right">{{$item->pivot->amount}}</td>
-                <td style="text-align: right">{{$item->pivot->price}}</td>
+                <td style="text-align: right">
+                    @if ($item->pivot->price_list > $item->pivot->price)
+                        <del style="color: red;">{{$item->pivot->price_list}}</del> 
+                    @endif
+                    {{$item->pivot->price}}
+                </td>
                 <td style="text-align: right">@money($item->pivot->amount * $item->pivot->price)</td>
 
                 @php
