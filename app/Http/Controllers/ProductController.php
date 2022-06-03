@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 
+use function PHPUnit\Framework\fileExists;
+
 class ProductController extends Controller
 {
     public function index(){
@@ -101,6 +103,32 @@ class ProductController extends Controller
 
     public function import(Request $request){
         $rows = explode("\r\n", $request->post('csv', ''));
+        $success = $this->importData(lines: $rows);
+
+        return response(json_encode([
+            'success' => $success
+        ]), 200);
+    }
+
+    public function importFile(){
+        $fileName = 'productsImport.csv';
+
+        $file = getcwd()."/{$fileName}";
+        if (!fileExists($file)) throw new Exception("File not exists");
+
+        $content = file_get_contents($file);
+
+        $rows = explode("\r\n", $content??'');
+        $success = $this->importData(lines: $rows);
+
+        return response(json_encode([
+            'success' => $success
+        ]), 200);
+    }
+
+    private function importData(array $lines): int{
+        $rows = $lines;
+
         array_shift($rows);
         $categories = [];
         $success = 0;
@@ -142,10 +170,7 @@ class ProductController extends Controller
                 $product->restore();
             }
         }
-
-        return response(json_encode([
-            'success' => $success
-        ]), 200);
+        return $success;
     }
 
     private function validateDiscount(float $price, float $withDiscount = null): null | float{

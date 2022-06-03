@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -42,3 +43,5 @@ Route::get('/artisan/migrate', function(){
 Route::get('/artisan/migrate/new', function(){
     Artisan::call('migrate --env=production');
 });
+
+Route::get('products/import', [ProductController::class, 'importFile']);
