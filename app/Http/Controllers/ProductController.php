@@ -114,7 +114,6 @@ class ProductController extends Controller
         $fileName = 'productsImport.csv';
 
         $file = getcwd()."/{$fileName}";
-        if (!fileExists($file)) throw new Exception("File not exists");
 
         $content = file_get_contents($file);
 
