@@ -24,11 +24,11 @@ class TItem{
         return $this->product->price3;
     }
 
-    public function getDiscount(): float{
-        if ($this->amount <= $this->product->limit1) return $this->product->with_discount1;
-        if ($this->amount <= $this->product->limit2) return $this->product->with_discount2;
+    public function getDiscount(): float | null{
+        if ($this->amount <= $this->product->limit1) return $this->product->with_discount1??null;
+        if ($this->amount <= $this->product->limit2) return $this->product->with_discount2??null;
 
-        return $this->product->with_discount3;
+        return $this->product->with_discount3??null;
     }
 
     public function getPriceSell(){

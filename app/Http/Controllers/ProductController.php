@@ -115,6 +115,12 @@ class ProductController extends Controller
 
         $file = getcwd()."/{$fileName}";
 
+        if (!file_exists($file)){
+            return response(json_encode([
+                'message' => 'The file no exist'
+            ]), 500);
+        }
+
         $content = file_get_contents($file);
 
         $rows = explode("\r\n", $content??'');
