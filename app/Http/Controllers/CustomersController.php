@@ -45,6 +45,11 @@ class CustomersController extends Controller
             unset($data['user']);
             $data['user_id'] = $user->id;
             $data['confirmed'] = $data['confirmed']??0;
+            $data['shopped'] = $data['shopped']??'No';
+
+            $data['confirmed'] = $data['confirmed'] == ""?0:$data['confirmed'];
+            $data['shopped'] = $data['shopped'] == ""?'No':$data['shopped'];
+
             $customer = Customer::create($data);
             $to = explode(",", env('MAIL_ADMINS', ''));
 
