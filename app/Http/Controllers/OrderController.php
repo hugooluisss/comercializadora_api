@@ -16,12 +16,12 @@ class OrderController extends Controller{
         $customer = Customer::where('user_id', Auth::id())->first();
         if (is_null($customer)){
             return Order::with(['items', 'customer', 'status'])
-                ->orderBy('updated_at', 'desc')
+                ->orderBy('id', 'desc')
                 ->get();
         }else{
             return Order::with(['items', 'customer', 'status'])
                 ->where('customer_id', $customer->id)
-                ->orderBy('updated_at', 'desc')
+                ->orderBy('id', 'desc')
                 ->get();
         }
     }
