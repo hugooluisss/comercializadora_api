@@ -98,8 +98,14 @@ class CustomersController extends Controller
         $user = User::findOrFail($customer->user_id);
         $data = $request->all();
 
-        if ($data['user']['password']??'' == '')
-            $data['user']['password'] = $user->password;
+        // if ($data['user']['password']??'' == '')
+        //     $data['user']['password'] = $user->password;
+
+        if (isset($data['user'])){
+            $data['user']['password'] = isset($data['user']['password'])?bcrypt($data['user']['password']):$user->password;    
+        }else{
+            $data['user']['password'] = isset($data['password'])?bcrypt($data['password']):$user->password;
+        }
 
         $user->update($data['user']);
         unset($data['user']);
