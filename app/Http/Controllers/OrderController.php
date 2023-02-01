@@ -12,18 +12,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller{
-    public function index(){
+    public function index(Request $request){
         $customer = Customer::where('user_id', Auth::id())->first();
-        if (is_null($customer)){
-            return Order::with(['items', 'customer', 'status'])
-                ->orderBy('id', 'desc')
-                ->get();
-        }else{
-            return Order::with(['items', 'customer', 'status'])
-                ->where('customer_id', $customer->id)
-                ->orderBy('id', 'desc')
-                ->get();
+
+        $end = date('Y-m-d', strtotime($request->get('end')));
+        $start = date('Y-m-d', strtotime($request->get('start')));
+        $query = Order::with(['items', 'customer', 'status'])
+            ->whereBetween('updated_at', [$start, $end])
+            ->orderBy('id', 'desc');
+
+        if (!is_null($customer)){
+            $query = $query->where('customer_id', $customer->id);
         }
+
+        return $query->get();
     }
 
     /**

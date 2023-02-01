@@ -59,7 +59,7 @@ Route::group([
     Route::post('favorites', [FavoritesController::class, 'addFavorites']);
     Route::delete('favorites/{product_id}', [FavoritesController::class, 'removeFavorites']);
 
-    Route::get('orders', [OrderController::class, 'index']);
+    Route::post('orders/list', [OrderController::class, 'index']);
     Route::get('orders/{id}', [OrderController::class, 'get']);
     Route::post('orders', [OrderController::class, 'store']);
     Route::post('orders/set_status/{id}', [OrderController::class, 'setStatus']);
