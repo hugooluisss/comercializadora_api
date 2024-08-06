@@ -138,41 +138,45 @@ class ProductController extends Controller
         $categories = [];
         $success = 0;
         foreach($rows as $row){
-            $productForImport = $this->createObjectCsv(data: str_getcsv($row));
+            try{
+                $productForImport = $this->createObjectCsv(data: str_getcsv($row));
 
-            $product = Product::withTrashed()->where(['sku' => $productForImport->sku])->first();
-            if (is_null($product)){
-                $product = new Product();
-            }
+                $product = Product::withTrashed()->where(['sku' => $productForImport->sku])->first();
+                if (is_null($product)){
+                    $product = new Product();
+                }
 
-            $product->sku = $productForImport->sku;
-            $product->name = $productForImport->name;
-            $product->description = $productForImport->description;
-            $product->image = $productForImport->image;
-            $product->stock = $productForImport->stock;
-            $product->price1 = $productForImport->price1;
-            $product->price2 = $productForImport->price2;
-            $product->price3 = $productForImport->price3;
-            $product->with_discount1 = $this->validateDiscount($productForImport->price1, $productForImport->with_discount1);
-            $product->with_discount2 = $this->validateDiscount($productForImport->price2, $productForImport->with_discount2);
-            $product->with_discount3 = $this->validateDiscount($productForImport->price3, $productForImport->with_discount3);
-            $product->limit1 = $productForImport->limit1;
-            $product->limit2 = $productForImport->limit2;
-            $product->brand = $productForImport->brand;
+                $product->sku = $productForImport->sku;
+                $product->name = $productForImport->name;
+                $product->description = $productForImport->description;
+                $product->image = $productForImport->image;
+                $product->stock = $productForImport->stock;
+                $product->price1 = $productForImport->price1;
+                $product->price2 = $productForImport->price2;
+                $product->price3 = $productForImport->price3;
+                $product->with_discount1 = $this->validateDiscount($productForImport->price1, $productForImport->with_discount1);
+                $product->with_discount2 = $this->validateDiscount($productForImport->price2, $productForImport->with_discount2);
+                $product->with_discount3 = $this->validateDiscount($productForImport->price3, $productForImport->with_discount3);
+                $product->limit1 = $productForImport->limit1;
+                $product->limit2 = $productForImport->limit2;
+                $product->brand = $productForImport->brand;
 
-            $subcategory = $this->searchCategories(
-                nameSubcategory: $productForImport->subcategory, 
-                nameCategory: $productForImport->category, 
-                bufferCategories: $categories);
+                $subcategory = $this->searchCategories(
+                    nameSubcategory: $productForImport->subcategory, 
+                    nameCategory: $productForImport->category, 
+                    bufferCategories: $categories);
 
-            $product->category_id = $subcategory->id;
+                $product->category_id = $subcategory->id;
 
-            $success += $product->save()?1:0;
+                $success += $product->save()?1:0;
 
-            if ($productForImport->forDelete){
-                $product->delete();
-            }else{
-                $product->restore();
+                if ($productForImport->forDelete){
+                    $product->delete();
+                }else{
+                    $product->restore();
+                }
+            }catch(\Exception $e){
+                error_log($e->getMessage());
             }
         }
         return $success;

@@ -62,6 +62,7 @@ Route::group([
     Route::post('orders/list', [OrderController::class, 'index']);
     Route::get('orders/{id}', [OrderController::class, 'get']);
     Route::post('orders', [OrderController::class, 'store']);
+    Route::get('orders', [OrderController::class, 'index']);
     Route::post('orders/set_status/{id}', [OrderController::class, 'setStatus']);
     // Route::get('products/{id}', [ProductController::class, 'get']);
 
