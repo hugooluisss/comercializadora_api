@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\EmailConfigController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderStatusController;
@@ -47,7 +48,7 @@ Route::group([
   ], function() {
     Route::resource('users', UserController::class)->except(['create', 'edit', 'show']);
     Route::post('users/{id}/setShops', [UserController::class, 'setShops']);
-    Route::resource('shops', ShopController::class)->except(['create', 'edit', 'show']);
+    //Route::resource('shops', ShopController::class)->except(['create', 'edit', 'show']);
     Route::resource('customers', CustomersController::class)->except(['create', 'edit', 'show']);
     Route::resource('categories', CategoryController::class)->except(['index', 'create', 'edit', 'show']);
 
@@ -67,6 +68,9 @@ Route::group([
     // Route::get('products/{id}', [ProductController::class, 'get']);
 
     Route::get('order_status', [OrderStatusController::class, 'index']);
+
+    Route::resource('email/config', EmailConfigController::class)->except(['create', 'edit', 'show']);
+
 });
 
 Route::group([], function(){

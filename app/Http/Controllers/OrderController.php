@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\EmailConfig;
 use App\Models\Order;
 use App\Models\Templates\TItem;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller{
@@ -54,8 +58,19 @@ class OrderController extends Controller{
             $items = $this->createListItems($data['items']);
             $order->items()->sync($items);
 
+            $emailConfig = EmailConfig::first();
+            if(!is_null($emailConfig)){
+                Log::info('Setting email config');
+
+                $this->setEmailConfiguration();
+                $emailAdmins = explode(",", $emailConfig->administrators);
+            }else{
+                Log::info('Using default email config');
+                $emailAdmins = explode(",", env('MAIL_ADMINS', ''));
+            }
+
             $this->sendMailNotification(order: $order);
-            $to = explode(",", env('MAIL_ADMINS', ''));
+            $to = $emailAdmins;
 
             Mail::send('emails.orderNotifyAdmin', ["order" => $order], function($message) use ($to) {
                 $message
@@ -71,6 +86,18 @@ class OrderController extends Controller{
                 'message' => $e->getMessage()
             ], 500);    
         }
+    }
+
+    private function setEmailConfiguration(): void{
+        $emailConfig = \App\Models\EmailConfig::first();
+
+        Config::set('mail.mailers.smtp.host', $emailConfig->host);
+        Config::set('mail.mailers.smtp.port', $emailConfig->port);
+        Config::set('mail.mailers.smtp.username', $emailConfig->username);
+        Config::set('mail.mailers.smtp.password', $emailConfig->password);
+        Config::set('mail.mailers.smtp.encryption', $emailConfig->encryption);
+        Config::set('mail.mailers.smtp.address', $emailConfig->address);
+        Config::set('mail.mailers.smtp.name', $emailConfig->fromName);
     }
 
     private function createListItems(array $items): array{
