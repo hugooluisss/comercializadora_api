@@ -19,6 +19,15 @@ class OrderController extends Controller{
     public function index(Request $request){
         $customer = Customer::where('user_id', Auth::id())->first();
 
+        $endParam = $request->get('end');
+        $startParam = $request->get('start');
+
+        //var_dump($endParam, $startParam);
+
+        if(is_null($endParam) || is_null($startParam)){
+            return [];
+        }
+
         $end = date('Y-m-d', strtotime($request->get('end')));
         $start = date('Y-m-d', strtotime($request->get('start')));
         $query = Order::with(['items', 'customer', 'status'])
