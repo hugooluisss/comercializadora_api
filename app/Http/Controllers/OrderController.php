@@ -28,8 +28,8 @@ class OrderController extends Controller{
             return [];
         }
 
-        $end = date('Y-m-d', strtotime($request->get('end')));
-        $start = date('Y-m-d', strtotime($request->get('start')));
+        $end = date('Y-m-d 23:59:59', strtotime($request->get('end')));
+        $start = date('Y-m-d 00:00:00', strtotime($request->get('start')));
         $query = Order::with(['items', 'customer', 'status'])
             ->whereBetween('updated_at', [$start, $end])
             ->orderBy('id', 'desc');
